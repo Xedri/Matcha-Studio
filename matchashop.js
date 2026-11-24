@@ -582,3 +582,110 @@ if (document.readyState === "loading") {
 } else {
     initializeMenu();
 }
+
+
+
+/* =====================================
+   MATCHA STUDIO — SHRINKING NAVBAR FIX
+===================================== */
+
+function initializeNavbarEffects() {
+    const navbar = document.querySelector("header");
+
+    if (!navbar) return;
+
+    let isCompact = false;
+
+    function updateNavbar() {
+        const scrollPosition = window.scrollY;
+
+        // Shrink early
+        if (!isCompact && scrollPosition > 15) {
+            isCompact = true;
+        }
+
+        // Expand only when near the top
+        else if (isCompact && scrollPosition < 5) {
+            isCompact = false;
+        }
+
+        navbar.classList.toggle(
+            "is-scrolled",
+            isCompact
+        );
+    }
+
+    updateNavbar();
+
+    window.addEventListener(
+        "scroll",
+        updateNavbar,
+        { passive: true }
+    );
+}
+
+/* IMPORTANT: Initialize the navbar */
+if (document.readyState === "loading") {
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeNavbarEffects
+    );
+} else {
+    initializeNavbarEffects();
+}
+
+
+
+/* =========================================
+   MATCHA STUDIO — SECTION REVEAL EFFECTS
+========================================= */
+
+function initializeSectionReveals() {
+    const sections = document.querySelectorAll(
+        "#menu, #about, #contact"
+    );
+
+    const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (
+        prefersReducedMotion ||
+        !("IntersectionObserver" in window)
+    ) {
+        return;
+    }
+
+    const observer = new IntersectionObserver(
+        (entries, currentObserver) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("is-visible");
+                    currentObserver.unobserve(entry.target);
+                }
+            });
+        },
+        {
+            threshold: 0.05,
+            rootMargin: "0px 0px -30px 0px"
+        }
+    );
+
+    sections.forEach((section) => {
+        observer.observe(section);
+        section.classList.add("reveal-ready");
+    });
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeSectionReveals
+    );
+} else {
+    initializeSectionReveals();
+}
+
+} else {
+    initializeMenu();
+}
