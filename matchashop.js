@@ -685,7 +685,3 @@ if (document.readyState === "loading") {
 } else {
     initializeSectionReveals();
 }
-
-} else {
-    initializeMenu();
-}
