@@ -467,14 +467,15 @@ dialog.checkout-modal::backdrop {
 
 /* About and Footer */
 .about-section {
-    background-color: #536C50;
-    color: #F5F5E9;
+    text-align: center;
     padding: 4rem 8%;
-    margin-top: 0;
+    background-color: #304B35;
+    color: #F5F5E9;
 }
 
 .about-section h2 {
     color: #D8E2B1;
+    margin-bottom: 1rem;
 }
 
 footer {
