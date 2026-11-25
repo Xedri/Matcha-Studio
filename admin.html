@@ -20,10 +20,10 @@
         <button type="button" data-view="products"><span>◈</span> Products</button>
         <button type="button" data-view="bookings"><span>▢</span> Bookings</button>
       </nav>
-      <div class="sidebar-note"><strong>Demo workspace</strong><p>Fictional data, saved on this browser only.</p></div>
+      <div class="sidebar-note"><strong>Database workspace</strong><p>Connected to your Supabase project. Test data only.</p></div>
     </aside>
     <main class="admin-main">
-      <div class="admin-heading"><div><p class="eyebrow">MATCHA STUDIO MANAGEMENT</p><h1 id="view-heading">Overview</h1><p id="view-subtitle">A snapshot of your café operations.</p></div><button type="button" id="reset-demo" class="secondary-button">Reset demo data</button></div>
+      <div class="admin-heading"><div><p class="eyebrow">MATCHA STUDIO MANAGEMENT</p><h1 id="view-heading">Overview</h1><p id="view-subtitle">A snapshot of your café operations.</p></div><button type="button" id="reset-demo" class="secondary-button">Refresh database</button></div>
       <p id="admin-feedback" class="feedback" role="status" hidden></p>
       <section id="view-overview" class="admin-view" aria-labelledby="view-heading">
         <div id="metrics" class="metrics-grid"></div>
@@ -39,11 +39,14 @@
         <article class="panel"><div class="panel-heading"><h2>Product catalog</h2><span>Changes appear on the storefront</span></div><div id="products-table" class="table-scroll"></div></article>
       </section>
       <section id="view-bookings" class="admin-view" hidden><article class="panel"><div class="panel-heading"><h2>Event inquiries</h2><span>Sample and submitted demo requests</span></div><div id="bookings-table" class="table-scroll"></div></article></section>
-      <footer class="admin-footer">Matcha Studio · Portfolio admin demo · Not an authenticated backend</footer>
+      <footer class="admin-footer">Matcha Studio · Supabase database test workspace</footer>
     </main>
   </div>
-  <script src="demo-data.js"></script>
-  <script src="auth.js"></script>
-  <script>if (MatchaAuth.requireAdmin()) { document.body.hidden = false; const script = document.createElement('script'); script.src = 'admin.js'; document.body.append(script); }</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="cloud-data.js"></script>
+<script src="auth.js"></script>
+  <script>MatchaAuth.requireAdmin().then(allowed=>{if(allowed){document.body.hidden=false;const script=document.createElement('script');script.src='admin.js';document.body.append(script);}});</script>
 </body>
 </html>
+
