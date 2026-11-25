@@ -156,7 +156,7 @@
             <hr class="divider">
 
             <form id="checkout-form" onsubmit="placeOrder(event)">
-                <p class="demo-checkout-note">Demo only. Use fictional contact details; your name and phone number are not saved. Sign in as Customer before ordering to track it in My Account.</p>
+                <p class="demo-checkout-note">Database-connected test version. Use fictional contact details; name and phone are not saved. Sign in as a Customer before submitting a test order.</p>
                 <label for="full-name">Full Name</label>
                 <input type="text" id="full-name" name="full-name"
                        placeholder="Enter your name" required>
@@ -180,10 +180,13 @@
 </dialog>
 
 
-<script src="demo-data.js"></script>
-<script src="matchashop.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="cloud-data.js"></script>
 <script src="auth.js"></script>
+<script src="bootstrap.js"></script>
 </body>
 </html>
+
 
 

@@ -468,14 +468,13 @@ dialog.checkout-modal::backdrop {
 /* About and Footer */
 .about-section {
     text-align: center;
-    padding: 4rem 8%;
-    background-color: #304B35;
-    color: #F5F5E9;
+    padding: 3rem 8%;
+    background-color: var(--color-background);
+    margin-top: 1rem;
 }
 
 .about-section h2 {
-    color: #D8E2B1;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 footer {
@@ -1146,4 +1145,35 @@ header.navbar.is-scrolled .header-actions { color:var(--color-primary); }
 .history-card-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; }
 .history-card p { margin:8px 0; }
 .history-card small { color:var(--color-secondary); }
+.database-notice { padding:14px 5%; text-align:center; color:#803c32; background:#f7e9df; }
 
+/* About section above the contact information */
+.about-section {
+    background-color:#536c50;
+    color:#f5f5e9;
+    padding:4rem 8%;
+    margin-top:0;
+}
+.about-section h2 { color:#d8e2b1; }
+.about-section p { max-width:800px; margin-inline:auto; }
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 50px;
+}
+
+#toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #304B35;
+}

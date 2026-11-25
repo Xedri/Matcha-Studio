@@ -57,6 +57,7 @@ function applyBranding() {
 
 let products = MatchaData.load().products;
 function reconcileCart() {
+    if (!MatchaData.isAvailable()) return false;
     const latest = MatchaData.load().products;
     const before = JSON.stringify(cart);
     cart = cart.flatMap(item => {
@@ -273,7 +274,10 @@ function renderCart() {
 
 // Open checkout
 // Open checkout
-function openCheckout() {
+async function openCheckout() {
+    await MatchaAuth.ready;
+    if(MatchaAuth.current()?.role!=='customer'){alert('Please sign in as a customer to place a test order.');location.href='login.html';return;}
+    try { await MatchaData.refreshProducts(); } catch(error) { alert('Could not load the current catalog. Try again.'); return; }
     if (reconcileCart()) { renderCart(); alert('Your cart was updated to reflect current prices and availability. Please review it.'); return; }
     if (cart.length === 0) {
         alert("Please add an item to your order first.");
@@ -372,8 +376,15 @@ function renderCheckoutSummary() {
 }
 
 // Place demo order
-function placeOrder(event) {
+async function placeOrder(event) {
     event.preventDefault();
+    const submit=event.currentTarget.querySelector('button[type="submit"]');
+    if(submit.disabled)return;
+    submit.disabled=true;
+    try {
+    await MatchaAuth.ready;
+    if(MatchaAuth.current()?.role!=='customer'){alert('Sign in as a customer first.');return;}
+    await MatchaData.refreshProducts();
 
     if (cart.length === 0) {
         alert("Please add an item to your order first.");
@@ -384,9 +395,8 @@ function placeOrder(event) {
     const orderType = document.getElementById("order-type").value;
     if (reconcileCart()) { renderCart(); renderCheckoutSummary(); alert('The catalog changed. Please review your updated order.'); return; }
     let order;
-    try { order = MatchaData.placeOrder(cart, MatchaAuth.current(), orderType); }
-    catch(error) { alert(`Unable to save the demo order: ${error.message}`); return; }
-    alert(`Demo order ${order.id} recorded!\nTotal: ₱${order.total.toFixed(2)}\nThe order is now visible in the Admin Dashboard. No payment or real order was made.`);
+    order = await MatchaData.placeOrder(cart, orderType);
+    alert(`Test order ${order.id.slice(0,8).toUpperCase()} recorded!\nTotal: ₱${Number(order.total).toFixed(2)}\nIt is saved in the database. No payment or real purchase was made.`);
 
     cart = [];
 
@@ -395,6 +405,8 @@ function placeOrder(event) {
     document.getElementById("checkout-form").reset();
 
     closeCheckout();
+    } catch(error) { reconcileCart();renderCart();renderCheckoutSummary();alert(`Unable to record order: ${error.message}`); }
+    finally {submit.disabled=false;}
 }
 
 // Close checkout when clicking outside
@@ -516,15 +528,9 @@ function initializeMenu() {
     renderCategoryFilters();
     renderProducts();
 }
-window.addEventListener('storage', event => {
-    if (event.key === MatchaData.KEY) {
-        reconcileCart(); renderCart(); renderCategoryFilters(); renderProducts();
-        if (document.getElementById('checkout-modal').open) renderCheckoutSummary();
-    }
-});
-window.addEventListener('pageshow', event => {
-    if (event.persisted) { reconcileCart(); renderCart(); renderCategoryFilters(); renderProducts(); }
-});
+async function refreshStorefront(){try{await MatchaData.refreshProducts();reconcileCart();renderCart();renderCategoryFilters();renderProducts();if(document.getElementById('checkout-modal').open)renderCheckoutSummary();window.dispatchEvent(new Event('matcha-catalog-updated'));}catch(error){console.warn('Catalog refresh failed:',error.message);}}
+window.addEventListener('focus',refreshStorefront);
+window.addEventListener('pageshow',event=>{if(event.persisted)refreshStorefront();});
 
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initializeMenu);
@@ -704,8 +710,7 @@ function initializeBestsellers() {
     });
     stage.addEventListener('pointercancel', () => { gesture=null; stage.classList.remove('dragging'); });
     select(0);
-    window.addEventListener('storage',event=>{if(event.key===MatchaData.KEY)select(active);});
-    window.addEventListener('pageshow',event=>{if(event.persisted)select(active);});
+    window.addEventListener('matcha-catalog-updated',()=>select(active));
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeBestsellers);
 else initializeBestsellers();

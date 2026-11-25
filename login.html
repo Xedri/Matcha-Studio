@@ -7,6 +7,19 @@
     <title>Log In | Matcha Studio</title>
     <meta name="description" content="Discover Matcha Studio, a fictional café concept featuring handcrafted matcha drinks, specialty teas, and pastries.">
     <link rel="stylesheet" href="matchashop.css">
+    <style>
+        .login-password-field { position: relative; width: 100%; }
+        .login-form .login-password-field input { width: 100%; padding-right: 50px; margin-bottom: 0; }
+        .login-password-field button { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; display: grid; place-items: center; background: transparent; border: 0; border-radius: 8px; color: #304b35; cursor: pointer; }
+        .login-password-field button:hover { background: #edf1dc; }
+        .login-password-field button:focus-visible { outline: 2px solid #536c50; }
+        .login-password-field button svg { width: 22px; height: 22px; }
+        .login-password-field button svg[hidden] { display: none; }
+        .login-secondary-actions { display: flex;  justify-content: center; gap: 8px; }
+        .login-secondary-actions button { width: auto; font-size: 0.78rem; padding: 6px 12px; border-width: 1px; white-space: nowrap;}
+        .login-secondary-actions button:disabled { opacity: .55; cursor: not-allowed; }
+        @media(max-width: 420px) { .login-secondary-actions { grid-template-columns: 1fr; } }
+    </style>
 </head>
 <body>
 
@@ -84,18 +97,29 @@
 
 
 <main class="login-page">
-    <section class="login-intro"><span class="section-eyebrow">YOUR MATCHA MOMENT</span><h1>Welcome back.</h1><p>Sign in to explore your Matcha Studio account.</p><p class="login-demo-note">Portfolio demonstration only. Use the sample accounts below; never enter a real password.</p></section>
+    <section class="login-intro"><span class="section-eyebrow">YOUR MATCHA MOMENT</span><h1>Welcome back.</h1><p>Sign in to explore your Matcha Studio account.</p><p class="login-demo-note">Database-connected test version. Your account is managed by Supabase. Do not use this testing site for real purchases.</p></section>
     <section class="login-card" aria-labelledby="login-heading">
         <h2 id="login-heading">Log In</h2>
         <form id="login-form" method="post" class="login-form">
             <label for="login-email">Email address</label><input id="login-email" name="email" type="email" placeholder="Enter your email" autocomplete="username" required>
-            <label for="login-password">Password</label><input id="login-password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+            <label for="login-password">Password</label>
+            <div class="login-password-field">
+                <input id="login-password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+                <button type="button" id="login-password-toggle" aria-label="Show password" aria-controls="login-password" aria-pressed="false">
+                    <svg id="password-eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg id="password-eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.2A11.5 11.5 0 0 1 12 5c6 0 10 7 10 7a18 18 0 0 1-2.6 3.4M6.2 6.2C3.5 8.2 2 12 2 12s4 7 10 7c1 0 2-.2 3-.5"/></svg>
+                </button>
+            </div>
             <p id="login-error" role="alert" class="login-error" hidden></p>
             <button class="booking-submit" type="submit" disabled>Log In →</button>
+            <div class="login-secondary-actions">
+                <button type="button" id="signup-btn" class="menu-link" disabled>Create account</button>
+                <button type="button" id="forgot-password" class="menu-link">Forgot password?</button>
+            </div>
+            <p id="password-reset-message" class="booking-note" role="status" hidden></p>
         </form>
         <div id="account-panel" class="account-panel" hidden><span class="account-avatar" aria-hidden="true">●</span><h3 id="profile-name"></h3><p id="profile-role"></p><a id="profile-destination" class="menu-link" href="index.html">Continue</a><button class="account-signout" id="profile-signout" type="button">Log Out</button></div>
-        <section id="order-history" class="order-history" hidden aria-labelledby="history-heading"><h3 id="history-heading">My Orders</h3><p class="booking-note">Demo orders placed while signed in with the Customer account.</p><div id="history-list"></div></section>
-        <div id="demo-accounts" class="demo-accounts"><p>TRY A DEMO ACCOUNT</p><div class="demo-account-grid"><button type="button" data-fill-account="customer"><strong>Customer</strong><span>customer@example.test</span><span>MatchaCustomer123</span><small>Fill customer details →</small></button><button type="button" data-fill-account="admin"><strong>Admin</strong><span>admin@example.test</span><span>MatchaAdmin123</span><small>Fill admin details →</small></button></div></div>
+        <section id="order-history" class="order-history" hidden aria-labelledby="history-heading"><h3 id="history-heading">My Orders</h3><p class="booking-note">Your test orders and current status.</p><button type="button" id="refresh-history" class="account-signout">Refresh orders</button><div id="history-list"></div></section>
     </section>
 </main>
 
@@ -156,7 +180,7 @@
             <hr class="divider">
 
             <form id="checkout-form" onsubmit="placeOrder(event)">
-                <p class="demo-checkout-note">Demo only. Use fictional contact details; your name and phone number are not saved. Sign in as Customer before ordering to track it in My Account.</p>
+                <p class="demo-checkout-note">Database-connected test version. Use fictional contact details; name and phone are not saved. Sign in as a Customer before submitting a test order.</p>
                 <label for="full-name">Full Name</label>
                 <input type="text" id="full-name" name="full-name"
                        placeholder="Enter your name" required>
@@ -180,10 +204,50 @@
 </dialog>
 
 
-<script src="demo-data.js"></script>
-<script src="matchashop.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="cloud-data.js"></script>
 <script src="auth.js"></script>
+<script src="bootstrap.js"></script>
+<script>
+    (() => {
+        const field = document.getElementById('login-password');
+        const button = document.getElementById('login-password-toggle');
+        const eyeOpen = document.getElementById('password-eye-open');
+        const eyeClosed = document.getElementById('password-eye-closed');
+        button.addEventListener('click', () => {
+            const revealing = field.type === 'password';
+            field.type = revealing ? 'text' : 'password';
+            button.setAttribute('aria-label', revealing ? 'Hide password' : 'Show password');
+            button.setAttribute('aria-pressed', String(revealing));
+            eyeOpen.hidden = revealing;
+            eyeClosed.hidden = !revealing;
+        });
+        const forgot = document.getElementById('forgot-password');
+        const email = document.getElementById('login-email');
+        const message = document.getElementById('password-reset-message');
+        forgot.addEventListener('click', async () => {
+            if (!email.reportValidity()) return;
+            if (!MatchaData.client || !['http:', 'https:'].includes(location.protocol)) {
+                message.textContent = 'Open the website using Live Server, then try again.';
+                message.hidden = false;
+                return;
+            }
+            forgot.disabled = true;
+            message.hidden = false;
+            message.textContent = 'Sending reset link…';
+            try {
+                const redirectTo = new URL('reset-password.html', location.href).href;
+                const { error } = await MatchaData.client.auth.resetPasswordForEmail(email.value.trim(), { redirectTo });
+                if (error) throw error;
+                message.textContent = 'If an account exists for that email, check your inbox for a password reset link.';
+            } catch (_) {
+                message.textContent = 'Unable to request a reset right now. Please try again later.';
+            } finally {
+                forgot.disabled = false;
+            }
+        });
+    })();
+</script>
 </body>
 </html>
-
-
