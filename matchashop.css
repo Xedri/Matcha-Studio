@@ -469,7 +469,7 @@ dialog.checkout-modal::backdrop {
 .about-section {
     text-align: center;
     padding: 3rem 8%;
-    background-color: var(--color-background);
+    background-color: #304B35;
     margin-top: 1rem;
 }
 
