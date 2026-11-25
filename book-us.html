@@ -97,7 +97,7 @@
             <p>Tell us a little about yourself and what you have planned.</p>
         </div>
         <form id="booking-form" class="booking-form">
-            <p class="booking-note">Fields marked <span class="required-mark">*</span> are required. Demo only: your occasion and event notes are saved on this browser and shown in the demo dashboard. Use fictional details; name, email and phone are not saved.</p>
+            <p class="booking-note">Fields marked <span class="required-mark">*</span> are required. Sign in as a customer first. Test inquiries are saved to Supabase and visible to the admin; use fictional details. Name, email and phone from this form are not saved.</p>
             <div class="booking-field"><label for="booking-name">Full Name <span class="required-mark">*</span></label><input id="booking-name" name="name" type="text" placeholder="Enter Full Name" autocomplete="name" required></div>
             <div class="booking-field"><label for="booking-email">Email Address <span class="required-mark">*</span></label><input id="booking-email" name="email" type="email" placeholder="Enter Email Address" autocomplete="email" required></div>
             <div class="booking-field"><label for="booking-phone">Phone Number</label><input id="booking-phone" name="phone" type="tel" placeholder="Enter Phone Number" autocomplete="tel"></div>
@@ -176,7 +176,7 @@
             <hr class="divider">
 
             <form id="checkout-form" onsubmit="placeOrder(event)">
-                <p class="demo-checkout-note">Demo only. Use fictional contact details; your name and phone number are not saved. Sign in as Customer before ordering to track it in My Account.</p>
+                <p class="demo-checkout-note">Database-connected test version. Use fictional contact details; name and phone are not saved. Sign in as a Customer before submitting a test order.</p>
                 <label for="full-name">Full Name</label>
                 <input type="text" id="full-name" name="full-name"
                        placeholder="Enter your name" required>
@@ -200,11 +200,14 @@
 </dialog>
 
 
-<script src="demo-data.js"></script>
-<script src="matchashop.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="cloud-data.js"></script>
 <script src="auth.js"></script>
+<script src="bootstrap.js"></script>
 <script src="book-us.js"></script>
 </body>
 </html>
+
 
 
