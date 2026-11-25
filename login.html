@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In | Matcha Studio</title>
+    <meta name="description" content="Discover Matcha Studio, a fictional café concept featuring handcrafted matcha drinks, specialty teas, and pastries.">
+    <link rel="stylesheet" href="matchashop.css">
+</head>
+<body>
+
+
+<!-- MATCHA STUDIO — NAVBAR -->
+<header class="navbar">
+    <nav aria-label="Main navigation">
+
+        <!-- Brand: Left -->
+        <a id="site-brand" href="index.html#home" class="brand">
+            Matcha Studio
+        </a>
+
+        <!-- Navigation: Center -->
+        <div class="nav-links">
+            <a href="index.html#home">Home</a>
+            <a href="menu.html">Our Menu</a>
+            <a href="index.html#about">About Us</a>
+            <a href="store-locator.html">Store Locator</a>
+            <a href="book-us.html">Book Us</a>
+
+
+
+        </div>
+
+        <div class="header-actions">
+            <a href="login.html" class="account-link" id="account-link" aria-label="Log in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="3.4"/><path d="M5 20v-2a7 7 0 0 1 14 0v2"/></svg><span id="account-name">Log In</span></a>
+        <!-- Shopping Cart: Right -->
+        <button
+            type="button"
+            id="header-cart-btn"
+            class="cart-btn"
+            onclick="openCart()"
+            aria-label="Open shopping basket"
+        >
+            <svg
+                class="cart-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <path d="M5 10h14l-1.5 9h-11L5 10z"></path>
+                <path d="M9 10V6a3 3 0 0 1 6 0v4"></path>
+                <line x1="9" y1="14" x2="9" y2="16"></line>
+                <line x1="12" y1="14" x2="12" y2="16"></line>
+                <line x1="15" y1="14" x2="15" y2="16"></line>
+            </svg>
+
+            <span id="item-count" class="cart-badge hidden">
+                0
+            </span>
+        </button>
+
+            <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-controls="site-drawer" aria-expanded="false"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+</header>
+<dialog class="site-drawer" id="site-drawer" aria-labelledby="drawer-title">
+    <div class="drawer-head"><a href="index.html" class="drawer-brand">Matcha Studio</a><button type="button" class="drawer-close" id="drawer-close" aria-label="Close navigation">&times;</button></div>
+    <div class="drawer-content"><h2 id="drawer-title">Explore</h2><p class="drawer-greeting" id="drawer-greeting">Welcome to Matcha Studio.</p><nav class="drawer-links" aria-label="More navigation">
+        <a href="login.html" id="drawer-account">Log In <span aria-hidden="true">→</span></a>
+        <a href="index.html#about">About Us <span aria-hidden="true">→</span></a>
+        <a href="store-locator.html">Store Locator <span aria-hidden="true">→</span></a>
+        <a href="book-us.html">Book Us <span aria-hidden="true">→</span></a>
+        <a href="admin.html" id="drawer-admin" hidden>Admin Dashboard <span aria-hidden="true">→</span></a>
+        <button type="button" id="drawer-signout" hidden>Log Out <span aria-hidden="true">→</span></button>
+    </nav></div>
+    <div class="drawer-foot"><strong>Matcha Studio</strong><p>© 2026 Matcha Studio · All rights reserved.</p></div>
+</dialog>
+
+
+
+<main class="login-page">
+    <section class="login-intro"><span class="section-eyebrow">YOUR MATCHA MOMENT</span><h1>Welcome back.</h1><p>Sign in to explore your Matcha Studio account.</p><p class="login-demo-note">Portfolio demonstration only. Use the sample accounts below; never enter a real password.</p></section>
+    <section class="login-card" aria-labelledby="login-heading">
+        <h2 id="login-heading">Log In</h2>
+        <form id="login-form" method="post" class="login-form">
+            <label for="login-email">Email address</label><input id="login-email" name="email" type="email" placeholder="Enter your email" autocomplete="username" required>
+            <label for="login-password">Password</label><input id="login-password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+            <p id="login-error" role="alert" class="login-error" hidden></p>
+            <button class="booking-submit" type="submit" disabled>Log In →</button>
+        </form>
+        <div id="account-panel" class="account-panel" hidden><span class="account-avatar" aria-hidden="true">●</span><h3 id="profile-name"></h3><p id="profile-role"></p><a id="profile-destination" class="menu-link" href="index.html">Continue</a><button class="account-signout" id="profile-signout" type="button">Log Out</button></div>
+        <section id="order-history" class="order-history" hidden aria-labelledby="history-heading"><h3 id="history-heading">My Orders</h3><p class="booking-note">Demo orders placed while signed in with the Customer account.</p><div id="history-list"></div></section>
+        <div id="demo-accounts" class="demo-accounts"><p>TRY A DEMO ACCOUNT</p><div class="demo-account-grid"><button type="button" data-fill-account="customer"><strong>Customer</strong><span>customer@example.test</span><span>MatchaCustomer123</span><small>Fill customer details →</small></button><button type="button" data-fill-account="admin"><strong>Admin</strong><span>admin@example.test</span><span>MatchaAdmin123</span><small>Fill admin details →</small></button></div></div>
+    </section>
+</main>
+
+
+
+
+<footer>
+    <p id="site-footer">&copy; 2026 Matcha Studio — Demo Website</p>
+</footer>
+
+<!-- Cart Backdrop -->
+<div id="cart-backdrop" class="cart-backdrop" onclick="closeCart()"></div>
+
+<!-- Cart Drawer -->
+<aside id="cart-drawer" class="cart-drawer" aria-hidden="true" inert>
+    <div class="cart-drawer-header">
+        <h2>Your Order</h2>
+        <button type="button" class="close-cart-btn"
+                onclick="closeCart()" aria-label="Close cart">&times;</button>
+    </div>
+
+    <div class="cart-drawer-body">
+        <ul id="cart-list">
+            <li class="empty-msg">Your cart is empty.</li>
+        </ul>
+
+        <hr class="divider">
+
+        <p class="total-line">
+            <strong>Total: ₱<span id="total-price">0.00</span></strong>
+        </p>
+
+        <button type="button" id="proceed-checkout-btn"
+                class="proceed-checkout-btn"
+                onclick="openCheckout()" disabled>
+            Proceed to Checkout
+        </button>
+    </div>
+</aside>
+
+<!-- Separate Checkout Modal -->
+<dialog id="checkout-modal" class="checkout-modal" aria-labelledby="checkout-title">
+    <div class="checkout-box">
+        <div class="checkout-header">
+            <h2 id="checkout-title">Checkout</h2>
+            <button type="button" class="close-checkout-btn"
+                    onclick="closeCheckout()" aria-label="Close checkout">&times;</button>
+        </div>
+
+        <div class="checkout-body">
+            <h3>Order Summary</h3>
+            <ul id="checkout-summary"></ul>
+
+            <p class="checkout-total">
+                <strong>Total: ₱<span id="checkout-total">0.00</span></strong>
+            </p>
+
+            <hr class="divider">
+
+            <form id="checkout-form" onsubmit="placeOrder(event)">
+                <p class="demo-checkout-note">Demo only. Use fictional contact details; your name and phone number are not saved. Sign in as Customer before ordering to track it in My Account.</p>
+                <label for="full-name">Full Name</label>
+                <input type="text" id="full-name" name="full-name"
+                       placeholder="Enter your name" required>
+
+                <label for="contact-number">Contact Number</label>
+                <input type="tel" id="contact-number" name="contact-number"
+                       placeholder="Enter your contact number" required>
+
+                <label for="order-type">Order Type</label>
+                <select id="order-type" name="order-type" required>
+                    <option value="" disabled selected>Select order type</option>
+                    <option value="Dine-in">Dine-in</option>
+                    <option value="Pick-up">Pick-up</option>
+                    <option value="Delivery">Delivery</option>
+                </select>
+
+                <button type="submit" class="place-order-btn">Place Order</button>
+            </form>
+        </div>
+    </div>
+</dialog>
+
+
+<script src="demo-data.js"></script>
+<script src="matchashop.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>
+
+
