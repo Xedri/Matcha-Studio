@@ -27,29 +27,14 @@ const MatchaAuth=(()=>{
         if(link){document.getElementById('account-name').textContent=account?account.name:'Log In';link.setAttribute('aria-label',account?`${account.name} account`:'Log In');document.getElementById('drawer-greeting').textContent=account?`Welcome, ${account.name}.`:'Welcome to Matcha Studio.';if(account)document.getElementById('drawer-account').textContent='My Account →';document.getElementById('drawer-admin').hidden=account?.role!=='admin';const signout=document.getElementById('drawer-signout');signout.hidden=!account;signout.addEventListener('click',logout);}
         const adminSignout=document.getElementById('admin-signout');if(adminSignout){adminSignout.addEventListener('click',logout);document.getElementById('admin-account-name').textContent=account?.name||'Admin';window.addEventListener('pageshow',async event=>{if(event.persisted){await loadAccount();if(account?.role!=='admin'){document.body.hidden=true;location.replace('login.html?admin=required');}}});}
         const form=document.getElementById('login-form');if(!form)return;
-        const error=document.getElementById('login-error'),email=document.getElementById('login-email'),password=document.getElementById('login-password'),submit=form.querySelector('button[type="submit"]'),signup=document.getElementById('signup-btn');
+        const error=document.getElementById('login-error'),email=document.getElementById('login-email'),password=document.getElementById('login-password'),submit=form.querySelector('button[type="submit"]');
         const adminRequired=new URLSearchParams(location.search).get('admin')==='required';
         if(account&&!(adminRequired&&account.role!=='admin')){document.getElementById('login-heading').textContent='My Account';form.hidden=true;document.getElementById('account-panel').hidden=false;document.getElementById('profile-name').textContent=account.name;document.getElementById('profile-role').textContent=account.role==='admin'?'Administrator':'Customer';const dest=document.getElementById('profile-destination');dest.href=account.role==='admin'?'admin.html':'index.html';dest.textContent=account.role==='admin'?'Open Admin Dashboard':'Continue Shopping';document.getElementById('profile-signout').addEventListener('click',logout);if(account.role==='customer'){document.getElementById('order-history').hidden=false;renderHistory();document.getElementById('refresh-history').addEventListener('click',renderHistory);}return;}
         function message(text){error.textContent=text;error.hidden=false;}
         if(adminRequired)message('Please sign in with an administrator account.');
         if(!client){message('Database connection unavailable. Check your internet connection.');return;}
-        submit.disabled=false;signup.disabled=false;
-        form.addEventListener('submit',async event=>{event.preventDefault();submit.disabled=true;signup.disabled=true;error.hidden=true;try{const response=await client.auth.signInWithPassword({email:email.value.trim(),password:password.value});if(response.error)throw Error(response.error.message);await loadAccount();if(!account)throw Error('Account profile not found.');location.href=account.role==='admin'?'admin.html':'index.html';}catch(e){message(e.message);}finally{submit.disabled=false;signup.disabled=false;}});
-        signup.addEventListener('click',async()=>{if(!form.reportValidity())return;if(password.value.length<8){message('Use a password of at least eight characters.');return;}submit.disabled=true;signup.disabled=true;try{const response=await client.auth.signUp({email:email.value.trim(),password:password.value,options:{emailRedirectTo:new URL('login.html',location.href).href}});if(response.error)throw Error(response.error.message);if(response.data.session){await loadAccount();location.href='index.html';}else{message('Check your email for a confirmation link, then sign in.');}}catch(e){message(e.message);}finally{submit.disabled=false;signup.disabled=false;}});
+        submit.disabled=false;
+        form.addEventListener('submit',async event=>{event.preventDefault();submit.disabled=true;error.hidden=true;try{const response=await client.auth.signInWithPassword({email:email.value.trim(),password:password.value});if(response.error)throw Error(response.error.message);await loadAccount();if(!account)throw Error('Account profile not found.');location.href=account.role==='admin'?'admin.html':'index.html';}catch(e){message(e.message);}finally{submit.disabled=false;}});
     }
     init();return {ready,current,requireAdmin,logout};
 })();
-
-const togglePassword = document.getElementById("toggle-password");
-const passwordInput = document.getElementById("login-password");
-
-togglePassword?.addEventListener("click", () => {
-    const isHidden = passwordInput.type === "password";
-
-    passwordInput.type = isHidden ? "text" : "password";
-
-    togglePassword.setAttribute(
-        "aria-label",
-        isHidden ? "Hide password" : "Show password"
-    );
-});

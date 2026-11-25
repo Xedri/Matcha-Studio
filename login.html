@@ -15,10 +15,8 @@
         .login-password-field button:focus-visible { outline: 2px solid #536c50; }
         .login-password-field button svg { width: 22px; height: 22px; }
         .login-password-field button svg[hidden] { display: none; }
-        .login-secondary-actions { display: flex;  justify-content: center; gap: 8px; }
-        .login-secondary-actions button { width: auto; font-size: 0.78rem; padding: 6px 12px; border-width: 1px; white-space: nowrap;}
-        .login-secondary-actions button:disabled { opacity: .55; cursor: not-allowed; }
-        @media(max-width: 420px) { .login-secondary-actions { grid-template-columns: 1fr; } }
+        .login-secondary-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+        .login-secondary-actions a { width: auto; text-align: center; font: inherit; font-size: .78rem; line-height: 1.2; padding: 6px 12px; border-width: 1px; white-space: nowrap; }
     </style>
 </head>
 <body>
@@ -113,10 +111,9 @@
             <p id="login-error" role="alert" class="login-error" hidden></p>
             <button class="booking-submit" type="submit" disabled>Log In →</button>
             <div class="login-secondary-actions">
-                <button type="button" id="signup-btn" class="menu-link" disabled>Create account</button>
-                <button type="button" id="forgot-password" class="menu-link">Forgot password?</button>
+                <a href="create-account.html" class="menu-link">Create account</a>
+                <a href="forgot-password.html" class="menu-link">Forgot password?</a>
             </div>
-            <p id="password-reset-message" class="booking-note" role="status" hidden></p>
         </form>
         <div id="account-panel" class="account-panel" hidden><span class="account-avatar" aria-hidden="true">●</span><h3 id="profile-name"></h3><p id="profile-role"></p><a id="profile-destination" class="menu-link" href="index.html">Continue</a><button class="account-signout" id="profile-signout" type="button">Log Out</button></div>
         <section id="order-history" class="order-history" hidden aria-labelledby="history-heading"><h3 id="history-heading">My Orders</h3><p class="booking-note">Your test orders and current status.</p><button type="button" id="refresh-history" class="account-signout">Refresh orders</button><div id="history-list"></div></section>
@@ -223,31 +220,8 @@
             eyeOpen.hidden = revealing;
             eyeClosed.hidden = !revealing;
         });
-        const forgot = document.getElementById('forgot-password');
-        const email = document.getElementById('login-email');
-        const message = document.getElementById('password-reset-message');
-        forgot.addEventListener('click', async () => {
-            if (!email.reportValidity()) return;
-            if (!MatchaData.client || !['http:', 'https:'].includes(location.protocol)) {
-                message.textContent = 'Open the website using Live Server, then try again.';
-                message.hidden = false;
-                return;
-            }
-            forgot.disabled = true;
-            message.hidden = false;
-            message.textContent = 'Sending reset link…';
-            try {
-                const redirectTo = new URL('reset-password.html', location.href).href;
-                const { error } = await MatchaData.client.auth.resetPasswordForEmail(email.value.trim(), { redirectTo });
-                if (error) throw error;
-                message.textContent = 'If an account exists for that email, check your inbox for a password reset link.';
-            } catch (_) {
-                message.textContent = 'Unable to request a reset right now. Please try again later.';
-            } finally {
-                forgot.disabled = false;
-            }
-        });
     })();
 </script>
 </body>
 </html>
+

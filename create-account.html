@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Matcha Studio</title>
+    <link rel="stylesheet" href="matchashop.css">
+    <style>
+        .account-header { padding: 20px 6%; background: #304b35; color: #fff; display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+        .account-header a { color: inherit; text-decoration: none; }
+        .account-header strong { font-size: 1.35rem; }
+        .standalone-account { display: grid; place-items: center; max-width: 580px; min-height: 75vh; margin: auto; padding: 34px 18px; }
+        .standalone-account .login-card { width: 100%; }
+        .standalone-account .login-card > p { margin-bottom: 20px; }
+        .show-fields { display: flex; align-items: center; gap: 8px; font-size: .85rem; }
+        .login-form .show-fields input { width: auto; margin: 0; accent-color: #304b35; }
+        .account-return { display: block; margin-top: 20px; text-align: center; font-size: .9rem; color: #304b35; }
+        .account-message { font-size: .9rem; color: #536c50; overflow-wrap: anywhere; }
+        .account-message.error { color: #a83c37; }
+        .booking-submit:disabled { opacity: .5; }
+    </style>
+</head>
+<body>
+    <header class="account-header"><a href="index.html"><strong>Matcha Studio</strong></a><a href="login.html">Log In</a></header>
+    <main class="standalone-account">
+        <section class="login-card" aria-labelledby="create-heading">
+            <span class="section-eyebrow">YOUR MATCHA MOMENT</span>
+            <h2 id="create-heading">Create an account</h2>
+            <p>Join Matcha Studio to place test orders and track them in My Orders.</p>
+            <form id="create-form" class="login-form" method="post">
+                <label for="create-email">Email address</label>
+                <input id="create-email" type="email" autocomplete="email" placeholder="Enter your email" required>
+                <label for="create-password">Password</label>
+                <input id="create-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" required>
+                <label for="create-confirm">Confirm password</label>
+                <input id="create-confirm" type="password" autocomplete="new-password" placeholder="Repeat your password" minlength="8" required>
+                <label class="show-fields"><input id="create-reveal" type="checkbox"> Show passwords</label>
+                <p id="create-status" class="account-message" role="status" hidden></p>
+                <button type="submit" class="booking-submit" disabled>Create account →</button>
+            </form>
+            <a class="account-return" href="login.html">Already have an account? Log In</a>
+        </section>
+    </main>
+    <footer>© 2026 Matcha Studio — Demo Website</footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script>
+        (() => {
+            const form = document.getElementById('create-form');
+            const email = document.getElementById('create-email');
+            const password = document.getElementById('create-password');
+            const confirm = document.getElementById('create-confirm');
+            const submit = form.querySelector('button[type="submit"]');
+            const status = document.getElementById('create-status');
+            function message(text, error = false) { status.textContent = text; status.classList.toggle('error', error); status.hidden = false; }
+            document.getElementById('create-reveal').addEventListener('change', event => { password.type = confirm.type = event.target.checked ? 'text' : 'password'; });
+            if (!window.supabase || !['http:', 'https:'].includes(location.protocol)) { message('Open this website using Live Server and check your internet connection.', true); return; }
+            const client = window.supabase.createClient(MATCHA_SUPABASE_URL, MATCHA_SUPABASE_PUBLISHABLE_KEY);
+            submit.disabled = false;
+            form.addEventListener('submit', async event => {
+                event.preventDefault();
+                if (password.value !== confirm.value) { message('Passwords do not match.', true); return; }
+                submit.disabled = true;
+                message('Creating your account…');
+                try {
+                    const { data, error } = await client.auth.signUp({ email: email.value.trim(), password: password.value, options: { emailRedirectTo: new URL('login.html', location.href).href } });
+                    if (error) throw error;
+                    form.reset();
+                    if (data.session) location.href = 'login.html';
+                    else message('Check your email for the confirmation link, then return to Log In.');
+                } catch (_) { message('Unable to create the account. Check your details or try again later.', true); }
+                finally { submit.disabled = false; }
+            });
+        })();
+    </script>
+</body>
+</html>
