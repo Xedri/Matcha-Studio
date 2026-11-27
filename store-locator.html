@@ -7,6 +7,7 @@
     <title>Store Locator | Matcha Studio</title>
     <meta name="description" content="Discover Matcha Studio, a fictional café concept featuring handcrafted matcha drinks, specialty teas, and pastries.">
     <link rel="stylesheet" href="matchashop.css">
+  <link rel="stylesheet" href="studio-assets/studio.css">
 </head>
 <body>
 
@@ -71,6 +72,8 @@
 <dialog class="site-drawer" id="site-drawer" aria-labelledby="drawer-title">
     <div class="drawer-head"><a href="index.html" class="drawer-brand">Matcha Studio</a><button type="button" class="drawer-close" id="drawer-close" aria-label="Close navigation">&times;</button></div>
     <div class="drawer-content"><h2 id="drawer-title">Explore</h2><p class="drawer-greeting" id="drawer-greeting">Welcome to Matcha Studio.</p><nav class="drawer-links" aria-label="More navigation">
+        <a href="index.html">Home</a>
+        <a href="menu.html">Our Menu</a>
         <a href="login.html" id="drawer-account">Log In <span aria-hidden="true">→</span></a>
         <a href="index.html#about">About Us <span aria-hidden="true">→</span></a>
         <a href="store-locator.html">Store Locator <span aria-hidden="true">→</span></a>
@@ -168,24 +171,19 @@
             <hr class="divider">
 
             <form id="checkout-form" onsubmit="placeOrder(event)">
-                <p class="demo-checkout-note">Database-connected test version. Use fictional contact details; name and phone are not saved. Sign in as a Customer before submitting a test order.</p>
-                <label for="full-name">Full Name</label>
-                <input type="text" id="full-name" name="full-name"
-                       placeholder="Enter your name" required>
-
-                <label for="contact-number">Contact Number</label>
-                <input type="tel" id="contact-number" name="contact-number"
-                       placeholder="Enter your contact number" required>
-
+                <p class="demo-checkout-note">Portfolio checkout. Choose a test payment outcome. No money moves.</p>
+                <label for="payment-result">Demo payment</label>
+                <select id="payment-result"><option value="approve">Approve test payment</option><option value="decline">Decline test payment</option></select>
+                <p id="payment-message" role="alert"></p>
                 <label for="order-type">Order Type</label>
                 <select id="order-type" name="order-type" required>
-                    <option value="" disabled selected>Select order type</option>
+                    
                     <option value="Dine-in">Dine-in</option>
-                    <option value="Pick-up">Pick-up</option>
+                    <option value="Pick-up" selected>Pick-up</option>
                     <option value="Delivery">Delivery</option>
                 </select>
 
-                <button type="submit" class="place-order-btn">Place Order</button>
+                <button type="submit" class="place-order-btn">Submit test payment</button>
             </form>
         </div>
     </div>
@@ -198,6 +196,10 @@
 <script src="auth.js"></script>
 <script src="bootstrap.js"></script>
 <script src="store-locator.js"></script>
+<dialog id="order-receipt" class="checkout-modal" aria-labelledby="receipt-title"><div class="checkout-box receipt">
+              <h2 id="receipt-title">Demo payment approved</h2><p id="receipt-details"></p>
+              <a class="menu-link" href="login.html">Track my order</a>
+              <button type="button" onclick="this.closest('dialog').close()">Continue browsing</button></div></dialog>
 </body>
 </html>
 

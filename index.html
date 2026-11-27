@@ -7,6 +7,7 @@
     <title>Matcha Studio</title>
     <meta name="description" content="Discover Matcha Studio, a fictional café concept featuring handcrafted matcha drinks, specialty teas, and pastries.">
     <link rel="stylesheet" href="matchashop.css">
+  <link rel="stylesheet" href="studio-assets/studio.css">
 </head>
 <body>
 
@@ -71,6 +72,8 @@
 <dialog class="site-drawer" id="site-drawer" aria-labelledby="drawer-title">
     <div class="drawer-head"><a href="index.html" class="drawer-brand">Matcha Studio</a><button type="button" class="drawer-close" id="drawer-close" aria-label="Close navigation">&times;</button></div>
     <div class="drawer-content"><h2 id="drawer-title">Explore</h2><p class="drawer-greeting" id="drawer-greeting">Welcome to Matcha Studio.</p><nav class="drawer-links" aria-label="More navigation">
+        <a href="index.html">Home</a>
+        <a href="menu.html">Our Menu</a>
         <a href="login.html" id="drawer-account">Log In <span aria-hidden="true">→</span></a>
         <a href="index.html#about">About Us <span aria-hidden="true">→</span></a>
         <a href="store-locator.html">Store Locator <span aria-hidden="true">→</span></a>
@@ -84,64 +87,24 @@
 
 
 <!-- MATCHA STUDIO — HERO SECTION -->
-<section id="home" class="hero">
-
-    <div class="hero-layout">
-
-        <!-- LEFT: HERO CONTENT -->
-        <div class="hero-content">
-
-            <span class="hero-eyebrow">
-                PREMIUM MATCHA EXPERIENCE
-            </span>
-
-            <h1 id="site-tagline">
-                A Fresh Take on Matcha
-            </h1>
-
-            <p id="site-description">
-                Handcrafted matcha drinks and delicate
-                pastries, made for peaceful moments.
-            </p>
-
-            <a href="menu.html" class="hero-btn">
-                Explore Our Menu
-            </a>
-
-        </div>
-
-        <!-- RIGHT: VERTICAL PROMOTIONAL VIDEO -->
-        <div class="hero-video-container">
-
-            <video
-                id="hero-video"
-                class="hero-video"
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="metadata"
-                aria-label="Matcha Studio promotional video"
-            >
-                <source
-                    src="Video/matcha-promo.mp4"
-                    type="video/mp4"
-                >
-                Your browser does not support video.
-            </video>
-
-        </div>
-
+<main>
+<section id="home" class="studio-hero" aria-labelledby="studio-title">
+  <div class="studio-copy">
+    <span class="studio-label">Matcha bar &amp; patisserie</span>
+    <h1 id="studio-title">Matcha,<br><em>slowly.</em></h1>
+    <p>Hand-whisked matcha, layered lattes, and pastries for an unhurried afternoon.</p>
+    <div class="studio-actions">
+      <a class="studio-primary" href="menu.html">Explore the menu <span aria-hidden="true">↗</span></a>
+      <a class="studio-film-link" href="#ritual">Watch the film</a>
     </div>
-
+  </div>
 </section>
 
 
 
 <section id="bestsellers" class="bestsellers-section" aria-labelledby="bestsellers-heading">
-    <span class="section-eyebrow">MATCHA STUDIO FAVORITES</span>
-    <h2 id="bestsellers-heading">Our Bestsellers</h2>
-    <p class="intro">Four favorites, crafted with care.</p>
+<h2 id="bestsellers-heading">The studio favorites</h2>
+    <p class="intro">Matcha, roasted tea, and something sweet.</p>
     <div class="featured-carousel" role="region" aria-roledescription="carousel" aria-label="Bestselling products">
         <button type="button" id="bestsellers-prev" class="featured-arrow" aria-label="Previous product">&#10094;</button>
         <div id="bestsellers-track" class="featured-stage" tabindex="0" aria-label="Swipe or use arrow keys to explore bestsellers"></div>
@@ -153,6 +116,16 @@
 </section>
 
 
+<section id="ritual" class="studio-ritual" aria-labelledby="film-title">
+  <div><span class="studio-label">Studio film · 8 seconds</span>
+    <h2 id="film-title">From whisk<br>to glass.</h2>
+    <p>A close look at the bamboo, the foam, and the meeting of matcha and milk.</p>
+  </div>
+  <video controls playsinline preload="none" poster="studio-assets/tea-whisk.jpg" aria-label="From whisk to glass. A silent study of whisked matcha and an iced latte.">
+    <source src="studio-assets/studio-study.webm" type="video/webm">
+    <a href="studio-assets/studio-study.webm">Open the silent studio film</a>
+  </video>
+</section>
 <section id="about" class="about-section">
     <h2 id="site-about-heading">About Matcha Studio</h2>
     <p id="site-about-text">Handcrafted matcha, Japanese teas and delicate pastries made for peaceful moments.</p>
@@ -168,6 +141,7 @@
     </a>
 </section>
 
+</main>
 <footer>
     <p id="site-footer">&copy; 2026 Matcha Studio — Demo Website</p>
     <p><a class="admin-demo-link" href="login.html">Account login · Portfolio demo</a></p>
@@ -223,24 +197,19 @@
             <hr class="divider">
 
             <form id="checkout-form" onsubmit="placeOrder(event)">
-                <p class="demo-checkout-note">Database-connected test version. Use fictional contact details; name and phone are not saved. Sign in as a Customer before submitting a test order.</p>
-                <label for="full-name">Full Name</label>
-                <input type="text" id="full-name" name="full-name"
-                       placeholder="Enter your name" required>
-
-                <label for="contact-number">Contact Number</label>
-                <input type="tel" id="contact-number" name="contact-number"
-                       placeholder="Enter your contact number" required>
-
+                <p class="demo-checkout-note">Portfolio checkout. Choose a test payment outcome. No money moves.</p>
+                <label for="payment-result">Demo payment</label>
+                <select id="payment-result"><option value="approve">Approve test payment</option><option value="decline">Decline test payment</option></select>
+                <p id="payment-message" role="alert"></p>
                 <label for="order-type">Order Type</label>
                 <select id="order-type" name="order-type" required>
-                    <option value="" disabled selected>Select order type</option>
+                    
                     <option value="Dine-in">Dine-in</option>
-                    <option value="Pick-up">Pick-up</option>
+                    <option value="Pick-up" selected>Pick-up</option>
                     <option value="Delivery">Delivery</option>
                 </select>
 
-                <button type="submit" class="place-order-btn">Place Order</button>
+                <button type="submit" class="place-order-btn">Submit test payment</button>
             </form>
         </div>
     </div>
@@ -252,6 +221,10 @@
 <script src="cloud-data.js"></script>
 <script src="auth.js"></script>
 <script src="bootstrap.js"></script>
+<dialog id="order-receipt" class="checkout-modal" aria-labelledby="receipt-title"><div class="checkout-box receipt">
+              <h2 id="receipt-title">Demo payment approved</h2><p id="receipt-details"></p>
+              <a class="menu-link" href="login.html">Track my order</a>
+              <button type="button" onclick="this.closest('dialog').close()">Continue browsing</button></div></dialog>
 </body>
 </html>
 

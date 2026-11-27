@@ -11,6 +11,9 @@ const MatchaData = (()=>{
     }
     function normalizeOrder(row){return {...row,customer:row.customer_name,orderType:row.order_type,items:(row.order_items||[]).map(i=>`${i.product_name} × ${i.quantity}`).join(', ')};}
     async function fetchOrders(){const rows=result(await db().from('orders').select('id,customer_id,customer_name,total,status,order_type,created_at,order_items(product_name,unit_price,quantity)').order('created_at',{ascending:false}));return rows.map(normalizeOrder);}
+    async function fetchBookings() {
+        return result(await db().from('bookings').select('id,occasion,status').order('created_at',{ascending:false}));
+    }
     async function refreshAdmin(){
         const [products,orders,bookings]=await Promise.all([refreshProducts(),fetchOrders(),db().from('bookings').select('*').order('created_at',{ascending:false}).then(result)]);
         state={products,orders,bookings:bookings.map(b=>({...b,customer:b.customer_name}))};return state;
@@ -26,5 +29,5 @@ const MatchaData = (()=>{
     async function removeProduct(id){result(await db().from('products').delete().eq('id',id).select('id').single());}
     async function setStatus(table,id,status){if(!['orders','bookings'].includes(table))throw Error('Invalid table');result(await db().from(table).update({status}).eq('id',id).select('id').single());}
     const ready=refreshProducts().catch(error=>{console.warn('Catalog unavailable:',error.message);return [];});
-    return {client,ready,load:()=>state,isAvailable:()=>available,refreshProducts,refreshAdmin,fetchOrders,placeOrder,addBooking,updateProduct,addProduct,removeProduct,setStatus};
+    return {client,ready,load:()=>state,isAvailable:()=>available,refreshProducts,refreshAdmin,fetchOrders,fetchBookings,placeOrder,addBooking,updateProduct,addProduct,removeProduct,setStatus};
 })();

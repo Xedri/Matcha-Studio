@@ -24,7 +24,7 @@ create table public.orders (
   id uuid primary key default gen_random_uuid(), customer_id uuid not null references auth.users(id),
   customer_name text not null, total bigint not null check (total >= 0),
   order_type text not null check (order_type in ('Dine-in','Pick-up','Delivery')),
-  status text not null default 'Pending' check (status in ('Pending','Preparing','Completed','Cancelled')),
+  status text not null default 'Pending' check (status in ('Pending','Preparing','Ready','Completed','Cancelled')),
   created_at timestamptz not null default now()
 );
 create table public.order_items (

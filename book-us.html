@@ -7,6 +7,7 @@
     <title>Book Us | Matcha Studio</title>
     <meta name="description" content="Discover Matcha Studio, a fictional café concept featuring handcrafted matcha drinks, specialty teas, and pastries.">
     <link rel="stylesheet" href="matchashop.css">
+  <link rel="stylesheet" href="studio-assets/studio.css">
 </head>
 <body>
 
@@ -71,6 +72,8 @@
 <dialog class="site-drawer" id="site-drawer" aria-labelledby="drawer-title">
     <div class="drawer-head"><a href="index.html" class="drawer-brand">Matcha Studio</a><button type="button" class="drawer-close" id="drawer-close" aria-label="Close navigation">&times;</button></div>
     <div class="drawer-content"><h2 id="drawer-title">Explore</h2><p class="drawer-greeting" id="drawer-greeting">Welcome to Matcha Studio.</p><nav class="drawer-links" aria-label="More navigation">
+        <a href="index.html">Home</a>
+        <a href="menu.html">Our Menu</a>
         <a href="login.html" id="drawer-account">Log In <span aria-hidden="true">→</span></a>
         <a href="index.html#about">About Us <span aria-hidden="true">→</span></a>
         <a href="store-locator.html">Store Locator <span aria-hidden="true">→</span></a>
@@ -98,9 +101,9 @@
         </div>
         <form id="booking-form" class="booking-form">
             <p class="booking-note">Fields marked <span class="required-mark">*</span> are required. Sign in as a customer first. Test inquiries are saved to Supabase and visible to the admin; use fictional details. Name, email and phone from this form are not saved.</p>
-            <div class="booking-field"><label for="booking-name">Full Name <span class="required-mark">*</span></label><input id="booking-name" name="name" type="text" placeholder="Enter Full Name" autocomplete="name" required></div>
-            <div class="booking-field"><label for="booking-email">Email Address <span class="required-mark">*</span></label><input id="booking-email" name="email" type="email" placeholder="Enter Email Address" autocomplete="email" required></div>
-            <div class="booking-field"><label for="booking-phone">Phone Number</label><input id="booking-phone" name="phone" type="tel" placeholder="Enter Phone Number" autocomplete="tel"></div>
+            
+            
+            
             <fieldset class="booking-field booking-occasions">
                 <legend>Occasion <span class="required-mark">*</span></legend>
                 <div class="occasion-options">
@@ -112,7 +115,7 @@
                 </div>
                 <p id="occasion-error" class="booking-error" role="alert" hidden>Please select at least one occasion.</p>
             </fieldset>
-            <div class="booking-field"><label for="booking-details">Tell us more about your event!</label><textarea id="booking-details" name="details" rows="5" placeholder="Tell us more..."></textarea></div>
+            <div class="booking-field"><label for="booking-details">Tell us more about your event!</label><textarea maxlength="500" id="booking-details" name="details" rows="5" placeholder="Tell us more..."></textarea></div>
             <button type="submit" class="booking-submit" disabled>Submit Inquiry <span aria-hidden="true">→</span></button>
             <p id="booking-status" class="booking-status" role="status" hidden></p>
         </form>
@@ -176,24 +179,19 @@
             <hr class="divider">
 
             <form id="checkout-form" onsubmit="placeOrder(event)">
-                <p class="demo-checkout-note">Database-connected test version. Use fictional contact details; name and phone are not saved. Sign in as a Customer before submitting a test order.</p>
-                <label for="full-name">Full Name</label>
-                <input type="text" id="full-name" name="full-name"
-                       placeholder="Enter your name" required>
-
-                <label for="contact-number">Contact Number</label>
-                <input type="tel" id="contact-number" name="contact-number"
-                       placeholder="Enter your contact number" required>
-
+                <p class="demo-checkout-note">Portfolio checkout. Choose a test payment outcome. No money moves.</p>
+                <label for="payment-result">Demo payment</label>
+                <select id="payment-result"><option value="approve">Approve test payment</option><option value="decline">Decline test payment</option></select>
+                <p id="payment-message" role="alert"></p>
                 <label for="order-type">Order Type</label>
                 <select id="order-type" name="order-type" required>
-                    <option value="" disabled selected>Select order type</option>
+                    
                     <option value="Dine-in">Dine-in</option>
-                    <option value="Pick-up">Pick-up</option>
+                    <option value="Pick-up" selected>Pick-up</option>
                     <option value="Delivery">Delivery</option>
                 </select>
 
-                <button type="submit" class="place-order-btn">Place Order</button>
+                <button type="submit" class="place-order-btn">Submit test payment</button>
             </form>
         </div>
     </div>
@@ -206,6 +204,10 @@
 <script src="auth.js"></script>
 <script src="bootstrap.js"></script>
 <script src="book-us.js"></script>
+<dialog id="order-receipt" class="checkout-modal" aria-labelledby="receipt-title"><div class="checkout-box receipt">
+              <h2 id="receipt-title">Demo payment approved</h2><p id="receipt-details"></p>
+              <a class="menu-link" href="login.html">Track my order</a>
+              <button type="button" onclick="this.closest('dialog').close()">Continue browsing</button></div></dialog>
 </body>
 </html>
 

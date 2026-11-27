@@ -1,3 +1,14 @@
+const studioPhotos = {
+    "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=500&q=80": "studio-assets/menu-1.jpg",
+    "https://i.pinimg.com/736x/2f/54/1a/2f541a46d086d366dd3f226a6eec7291.jpg": "studio-assets/menu-2.jpg",
+    "https://i.pinimg.com/736x/96/a1/9d/96a19d4353c8eebf2c96dbb023a9fd1a.jpg": "studio-assets/menu-3.jpg",
+    "https://i.pinimg.com/1200x/f8/4b/e7/f84be7206baddc3d0132d0aa61a62adb.jpg": "studio-assets/menu-4.jpg",
+    "https://i.pinimg.com/1200x/24/e7/f1/24e7f1797bcdc99d67ba297fe8d90435.jpg": "studio-assets/menu-5.jpg",
+    "https://i.pinimg.com/736x/55/ad/76/55ad76687970be4e4d4fc7ca81086029.jpg": "studio-assets/menu-6.jpg",
+    "https://i.pinimg.com/1200x/ff/5b/40/ff5b407faff74f628c146d87ceacd45d.jpg": "studio-assets/menu-7.jpg",
+    "https://i.pinimg.com/736x/30/98/b3/3098b37993867ed5b37bd686d463ca4b.jpg": "studio-assets/menu-8.jpg"
+};
+
 let cart = []; try { const saved = JSON.parse(localStorage.getItem("matcha-studio-cart") || "[]"); if (Array.isArray(saved)) cart = saved.filter(item => item && typeof item.name === "string" && Number.isFinite(item.price) && Number.isInteger(item.quantity) && item.quantity > 0); } catch (_) {}
 
 const siteConfig = {
@@ -275,6 +286,7 @@ function renderCart() {
 // Open checkout
 // Open checkout
 async function openCheckout() {
+    document.getElementById("payment-message").textContent = "";
     await MatchaAuth.ready;
     if(MatchaAuth.current()?.role!=='customer'){alert('Please sign in as a customer to place a test order.');location.href='login.html';return;}
     try { await MatchaData.refreshProducts(); } catch(error) { alert('Could not load the current catalog. Try again.'); return; }
@@ -299,7 +311,7 @@ async function openCheckout() {
     }
 
     // Move focus to the first input
-    document.getElementById("full-name").focus();
+    document.getElementById("payment-result").focus();
 }
 
 // Close checkout
@@ -326,7 +338,7 @@ function showCheckoutDialog() {
         dialog.showModal();
     }
 
-    document.getElementById("full-name").focus();
+    document.getElementById("payment-result").focus();
 }
 
 function hideCheckoutDialog() {
@@ -394,9 +406,15 @@ async function placeOrder(event) {
 
     const orderType = document.getElementById("order-type").value;
     if (reconcileCart()) { renderCart(); renderCheckoutSummary(); alert('The catalog changed. Please review your updated order.'); return; }
+    const feedback = document.getElementById('payment-message');
+    if (document.getElementById('payment-result').value === 'decline') {
+        feedback.textContent = 'Test payment declined. Your cart is saved. Choose approval to retry.';
+        return;
+    }
+    feedback.textContent = '';
     let order;
     order = await MatchaData.placeOrder(cart, orderType);
-    alert(`Test order ${order.id.slice(0,8).toUpperCase()} recorded!\nTotal: ₱${Number(order.total).toFixed(2)}\nIt is saved in the database. No payment or real purchase was made.`);
+
 
     cart = [];
 
@@ -405,6 +423,11 @@ async function placeOrder(event) {
     document.getElementById("checkout-form").reset();
 
     closeCheckout();
+    const receipt = document.getElementById('order-receipt');
+    document.getElementById('receipt-details').textContent =
+        `Order ${order.id.slice(0,8).toUpperCase()} · ${orderType} · ₱${Number(order.total).toFixed(2)}. Your order is pending staff review.`;
+    receipt.showModal();
+
     } catch(error) { reconcileCart();renderCart();renderCheckoutSummary();alert(`Unable to record order: ${error.message}`); }
     finally {submit.disabled=false;}
 }
@@ -444,7 +467,7 @@ visibleProducts.forEach(product => {
 
         // Create image
         const image = document.createElement("img");
-        image.src = product.image;
+        image.src = studioPhotos[product.image] || product.image;
         image.alt = product.name;
         image.width = 600;
         image.height = 600;
@@ -662,7 +685,7 @@ function initializeBestsellers() {
         card.type = 'button'; card.className = 'featured-card';
         card.setAttribute('aria-label', `Feature ${product.name}`);
         const img = document.createElement('img');
-        img.src = product.image; img.alt = product.name; img.draggable = false;
+        img.src = studioPhotos[product.image] || product.image; img.alt = product.name; img.draggable = false;
         card.append(img); stage.append(card);
         card.addEventListener('click', () => { if (!suppressClick) select(index); });
         return card;

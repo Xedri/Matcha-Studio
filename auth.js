@@ -15,7 +15,7 @@ const MatchaAuth=(()=>{
     async function logout(){if(!client)return;const {error}=await client.auth.signOut();if(error){alert('Unable to sign out. Please try again.');return;}account=null;location.href='login.html';}
     async function renderHistory(){
         const list=document.getElementById('history-list');if(!list||account?.role!=='customer')return;list.textContent='Loading your orders…';
-        try{const orders=await MatchaData.fetchOrders();list.replaceChildren();if(!orders.length){list.textContent='No orders yet. Explore the menu to place your first test order.';return;}
+        try{const [orders, bookings] = await Promise.all([MatchaData.fetchOrders(), MatchaData.fetchBookings()]);renderInquiries(bookings);list.replaceChildren();if(!orders.length){list.textContent='No orders yet. Explore the menu to place your first test order.';return;}
             for(const order of orders){const card=document.createElement('article');card.className='history-card';const header=document.createElement('div');header.className='history-card-header';const id=document.createElement('strong');id.textContent=order.id.slice(0,8).toUpperCase();const status=document.createElement('span');status.className='availability-badge';status.textContent=order.status;header.append(id,status);const items=document.createElement('p');items.textContent=order.items;const meta=document.createElement('small');meta.textContent=`${order.orderType} · ₱${Number(order.total).toFixed(2)}`;card.append(header,items,meta);list.append(card);}
         }catch(error){list.textContent='Unable to load order history. Try refreshing.';}
     }
@@ -38,3 +38,14 @@ const MatchaAuth=(()=>{
     }
     init();return {ready,current,requireAdmin,logout};
 })();
+
+function renderInquiries(bookings) {
+    const list = document.getElementById('inquiry-list');
+    list.replaceChildren();
+    if (!bookings.length) list.textContent = 'No event inquiries yet.';
+    for (const booking of bookings) {
+        const row = document.createElement('p');
+        row.textContent = `${booking.occasion} · ${booking.status} · ${booking.id}`;
+        list.append(row);
+    }
+}
